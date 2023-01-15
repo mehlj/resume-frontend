@@ -5,22 +5,37 @@ img.profilepic {
   float: left
 }
 
-.vl {
-  border-left: 3px solid grey;
-  height: 2130px;
+.title {
+  margin-left: 25; 
+}
+
+.bar {
+  margin-left: -23;
+}
+
+.bar {
+  list-style: none;
+}
+.bar >li {
+  position: relative;
+}
+.bar>li:before {
+  content: '\25CF';
+  margin-right: 10px;
+  font-size: 20px;
+}
+.bar>li:after {
   position: absolute;
-  left: 3%;
-  margin-left: -3px;
+  left: 0;
+  top: 0;
+  content: '';
+  border-left: 2px solid black;
+  margin-left: 5px;
+  height: 100%;
 }
-
-.body {
-  margin: 30;
+.bar >li:first-of-type:after {
+  top: 2%;
 }
-
-.dot {
-  height: 10px;
-  width: 10px;
-  background-color: #bbb;
-  border-radius: 100%;
-  display: inline-block;
+.bar >li:last-of-type:after {
+  top: -95%;
 }
