@@ -28,28 +28,20 @@
     <div class="title"><u>DevOps Engineer</u></div>
     <br>
     <div class="job">
-      <!-- TODO: reword -->
       <ul>
-        <li>Responsible for the reliability and efficiency of RHEL/CentOS servers, CI/CD pipelines, and various software development web applications.</li>
-        <li>Migrated nearly all customer applications hosted on standard CentOS VMs to Docker containers.</li>
-        <li>Deployed and managed a multi-node, multi-VLAN spanning Docker Swarm cluster hosting nearly 30 customer web applications across hundreds of users.</li>
-        <li>Wrote clean and readable docker-compose YAML for each Swarm service, storing the code in GitLab along with several GitLab CI jobs to automate deployment.</li>
-        <li>Contributed to a comprehensive library of Ansible roles and playbooks pertaining to RHEL/CentOS server and workstation provisioning, software deployment, hardening, patching, and unique application configuration.</li>
-        <li>Co-developed comprehensive tooling to automate previously manual DoD-required tasks in Python 3 using PyQT5 and various XML parsing libraries such as Pandas and BeautifulSoup. Tooling was leveraged by various internal Cybersecurity teams.</li>
-        <li>Worked closely with various software engineering teams to troubleshoot CI/CD pipeline issues in Bamboo or GitLab.</li>
-        <li>Managed a DoD cloud environment in AWS GovCloud for an aircraft software development customer.
-          <ul>
-            <li>Used Elastic Container Service (ECS) to host containerized customer applications.</li>
-            <li>Leveraged Jenkins to manage CI/CD pipelines involving custom container image building, vulnerability scanning using Anchore and Prisma Cloud, and deployment into ECS.</li>
-            <li>Implemented all environment provisioning and changes through source controlled Terraform stored in AWS CodeCommit.</li>
-          </ul>
-        </li>
-        <li>Deployed and managed an ElasticSearch and Kibana stack designed for log aggregation and analysis of all critical servers.</li>
-        <li>Deployed and managed a Prometheus and Grafana stack for metric gathering and analysis of all Swarm containers. Used Node Exporter, cadvisor, Black Box, and other agent software to gather data and designed dashboards to promote performance visibility. Implemented alerting via AlertManager to send page relevant teammates in an internal chat system.</li>
-        <li>Tuned performance, provisioned databases, and secured access to various Postgres servers.</li>
-        <li>Evaluated and built automation for Kubernetes in a test environment – for determining its viability for our production environment.</li>
-        <li>Occasionally aided another team in red team engagements of critical fleet systems.</li>
-      </ul>    
+        <li>Reduced cycle time and mean time to repair (MTTR) by migrating 30 production workloads from singular dedicated VMs to Docker Swarm clusters</li>
+        <li>Reduced operational toil by using Ansible roles to standardize configuration management of a fleet of ~100 CentOS machines</li>
+        <li>Reduced cycle time and improved network security posture by engineering Continuous Integration (CI) pipelines to produce secure container/VM images while enforcing quality gates</li>
+        <li>Reduced cycle time by developing Continuous Deployment (CD) pipelines that release containerized workloads to production</li>
+        <li>Reduced operational toil by co-developing Python tooling that automates the auditing of assets' Cybersecurity posture</li>
+        <li>Collaborated with software engineering teams to resolve CI/CD pipeline issues in Bamboo or GitLab</li>
+        <li>Aided in a full on-prem development environment migration to AWS GovCloud, resulting in improved developer productivity, cycle time, overall fleet readiness</li>
+           Project served as a U.S. Navy "North Star" program - a representative proof-of-concept for all Navy system engineering teams</li>
+        <li>Migrated legacy log aggregation system to an ElasticSearch, Logstash, Kibana (ELK) stack, resulting in improved visibilty into our network security posture</li>
+        <li>Deployed a Prometheus stack for aggregation and visualization of network metrics, resulting in reduced MTTR and alert fatigue</li>
+        <li>Occasionally participated in red team engagements of Navy fleet assets</li>
+        <li><b>Tech</b>: Python, Ansible, GitLab CI, Docker Swarm, Prometheus/Grafana/AlertManager, ELK stack, AWS ECS, Anchore, Prisma Cloud, Jenkins, vSphere</li>
+      </ul>
     </div>
     <br>
   </li>
@@ -144,6 +136,7 @@
     <li>AUTOMATION: Ansible, Bash, Python, PowerShell, CI/CD pipelines</li>    </li>
   </ul>
 
+  <!-- TODO: remove expired certs, add new ones (CKA and such) -->
   <font size="+2">Certifications</font>
   <hr />
   <ul>
