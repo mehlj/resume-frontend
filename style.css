@@ -33,9 +33,12 @@ img.profilepic {
   margin-left: 5px;
   height: 100%;
 }
+
+/* controls length of bar - top piece */
 .bar >li:first-of-type:after {
-  top: 2%;
+  top: 3%;
 }
+/* controls length of bar - bottom piece */
 .bar >li:last-of-type:after {
-  top: -95%;
+  top: -94%;
 }
