@@ -40,7 +40,7 @@ resource "aws_s3_bucket_website_configuration" "mehlj-resume-host" {
   }
 }
 
-resource "aws_s3_bucket_object" "website_contents" {
+resource "aws_s3_object" "website_contents" {
   for_each = fileset("./src/", "**")
   bucket = aws_s3_bucket.mehlj-resume.bucket
   key = each.value
