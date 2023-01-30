@@ -7,10 +7,10 @@ terraform {
   }
 
   backend "s3" {
-    bucket         = "mehlj-state"
+    bucket         = "mehlj-resume-state"
     key            = "global/s3/terraform.tfstate"
     region         = "us-east-1"
-    dynamodb_table = "mehlj_state_locks"
+    dynamodb_table = "resume_state_locks"
     encrypt        = true
   }
 }
