@@ -80,17 +80,52 @@ resource "aws_s3_object" "images" {
 #   content_type = "application/javascript"
 # }
 
-# You specify origin servers, like an Amazon S3 bucket or your own HTTP server, from which CloudFront gets your files which will then be distributed from CloudFront edge locations all over the world.
 
-# An origin server stores the original, definitive version of your objects. If you're serving content over HTTP, your origin server is either an Amazon S3 bucket or an HTTP server, such as a web server. Your HTTP server can run on an Amazon Elastic Compute Cloud (Amazon EC2) instance or on a server that you manage; these servers are also known as custom origins.
+locals {
+  s3_origin_id = "mehljresumeS3Origin"
+}
 
-# You upload your files to your origin servers. Your files, also known as objects, typically include web pages, images, and media files, but can be anything that can be served over HTTP.
 
-# If you're using an Amazon S3 bucket as an origin server, you can make the objects in your bucket publicly readable, so that anyone who knows the CloudFront URLs for your objects can access them. You also have the option of keeping objects private and controlling who accesses them. See Serving private content with signed URLs and signed cookies.
+resource "aws_cloudfront_distribution" "s3_distribution" {
+  origin {
+    domain_name              = aws_s3_bucket.mehlj-resume.bucket_regional_domain_name
+    #origin_access_control_id = aws_cloudfront_origin_access_control.default.id
+    origin_id                = local.s3_origin_id
+  }
 
-# You create a CloudFront distribution, which tells CloudFront which origin servers to get your files from when users request the files through your web site or application. At the same time, you specify details such as whether you want CloudFront to log all requests and whether you want the distribution to be enabled as soon as it's created.
+  enabled             = true
+  is_ipv6_enabled     = true
+  default_root_object = "resume.html"
 
-# CloudFront assigns a domain name to your new distribution that you can see in the CloudFront console, or that is returned in the response to a programmatic request, for example, an API request. If you like, you can add an alternate domain name to use instead.
+  default_cache_behavior {
+    allowed_methods  = ["DELETE", "GET", "HEAD", "OPTIONS", "PATCH", "POST", "PUT"]
+    cached_methods   = ["GET", "HEAD"]
+    target_origin_id = local.s3_origin_id
 
-# CloudFront sends your distribution's configuration (but not your content) to all of its edge locations or points of presence (POPs)— collections of servers in geographically-dispersed data centers where CloudFront caches copies of your files.
+    forwarded_values {
+      query_string = false
 
+      cookies {
+        forward = "none"
+      }
+    }
+
+    viewer_protocol_policy = "redirect-to-https"
+    min_ttl                = 0
+    default_ttl            = 3600
+    max_ttl                = 86400
+  }
+
+  price_class = "PriceClass_100" # NA and Europe
+
+  restrictions {
+    geo_restriction {
+      restriction_type = "whitelist"
+      locations        = ["US", "CA", "GB", "DE", "MX"]
+    }
+  }
+
+  viewer_certificate {
+    cloudfront_default_certificate = true
+  }
+}
