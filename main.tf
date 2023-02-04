@@ -80,6 +80,49 @@ resource "aws_s3_object" "images" {
 #   content_type = "application/javascript"
 # }
 
+# TODO pick up here
+# using an alternate domain name (mehlj.io) requires an ACM cert, not the default cloudfront cert
+# ref: https://medium.com/cloud-tidbits/terraforming-an-s3-react-website-with-acm-certificates-cloudfront-route53-150936350074
+
+resource "aws_acm_certificate" "cert" {
+  provider = aws.us-east-1
+  domain_name       = local.bucket_name
+  validation_method = "DNS"
+
+  lifecycle {
+    create_before_destroy = true
+  }
+}
+
+resource "aws_route53_zone" "main" {
+  name = "mehlj.io"
+}
+
+resource "aws_route53_record" "cert_validation" {
+  name    = "${aws_acm_certificate.cert.domain_validation_options.0.resource_record_name}"
+  type    = "${aws_acm_certificate.cert.domain_validation_options.0.resource_record_type}"
+  zone_id = "${data.aws_route53_zone.zone.id}"
+  records = ["${aws_acm_certificate.cert.domain_validation_options.0.resource_record_value}"]
+  ttl     = 60
+}
+
+resource "aws_acm_certificate_validation" "cert" {
+  certificate_arn         = "${aws_acm_certificate.cert.arn}"
+  validation_record_fqdns = ["${aws_route53_record.cert_validation.fqdn}"]
+}
+
+
+resource "aws_route53_record" "root_domain" {
+  zone_id = "${aws_route53_zone.main.zone_id}"
+  name = "mehlj.io"
+  type = "A"
+
+  alias {
+    name                   = aws_cloudfront_distribution.s3_distribution.domain_name
+    zone_id                = aws_cloudfront_distribution.s3_distribution.hosted_zone_id
+    evaluate_target_health = false
+  }
+}
 
 locals {
   s3_origin_id = "mehljresumeS3Origin"
@@ -88,17 +131,18 @@ locals {
 
 resource "aws_cloudfront_distribution" "s3_distribution" {
   origin {
-    domain_name              = aws_s3_bucket.mehlj-resume.bucket_regional_domain_name
-    #origin_access_control_id = aws_cloudfront_origin_access_control.default.id
-    origin_id                = local.s3_origin_id
+    domain_name  = aws_s3_bucket.mehlj-resume.bucket_regional_domain_name
+    origin_id    = local.s3_origin_id
   }
+
+  aliases = ["mehlj.io"]
 
   enabled             = true
   is_ipv6_enabled     = true
   default_root_object = "resume.html"
 
   default_cache_behavior {
-    allowed_methods  = ["DELETE", "GET", "HEAD", "OPTIONS", "PATCH", "POST", "PUT"]
+    allowed_methods  = ["GET", "HEAD", "OPTIONS"]
     cached_methods   = ["GET", "HEAD"]
     target_origin_id = local.s3_origin_id
 
@@ -110,7 +154,7 @@ resource "aws_cloudfront_distribution" "s3_distribution" {
       }
     }
 
-    viewer_protocol_policy = "redirect-to-https"
+    viewer_protocol_policy = "allow-all"
     min_ttl                = 0
     default_ttl            = 3600
     max_ttl                = 86400
@@ -120,8 +164,8 @@ resource "aws_cloudfront_distribution" "s3_distribution" {
 
   restrictions {
     geo_restriction {
-      restriction_type = "whitelist"
-      locations        = ["US", "CA", "GB", "DE", "MX"]
+      restriction_type = "none"
+      locations        = []
     }
   }
 
@@ -129,3 +173,4 @@ resource "aws_cloudfront_distribution" "s3_distribution" {
     cloudfront_default_certificate = true
   }
 }
+
