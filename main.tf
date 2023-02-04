@@ -80,13 +80,18 @@ resource "aws_s3_object" "images" {
 #   content_type = "application/javascript"
 # }
 
-# TODO pick up here
-# using an alternate domain name (mehlj.io) requires an ACM cert, not the default cloudfront cert
-# ref: https://medium.com/cloud-tidbits/terraforming-an-s3-react-website-with-acm-certificates-cloudfront-route53-150936350074
+
+
+# TODO pick up here, ref: https://www.oss-group.co.nz/blog/automated-certificates-aws
+
+resource "aws_route53_zone" "main" {
+  name         = "mehlj.io"
+  provider     = aws.virginia
+}
 
 resource "aws_acm_certificate" "cert" {
-  provider = aws.us-east-1
-  domain_name       = local.bucket_name
+  provider          = aws.virginia
+  domain_name       = "mehlj.io"
   validation_method = "DNS"
 
   lifecycle {
@@ -94,35 +99,36 @@ resource "aws_acm_certificate" "cert" {
   }
 }
 
-resource "aws_route53_zone" "main" {
-  name = "mehlj.io"
+resource "aws_route53_record" "cert_dns" {
+  allow_overwrite = true
+  name            = tolist(aws_acm_certificate.cert.domain_validation_options)[0].resource_record_name
+  records         = [tolist(aws_acm_certificate.cert.domain_validation_options)[0].resource_record_value]
+  type            = tolist(aws_acm_certificate.cert.domain_validation_options)[0].resource_record_type
+  zone_id         = aws_route53_zone.main.zone_id
+  ttl             = 60
+  provider        = aws.virginia
 }
 
-resource "aws_route53_record" "cert_validation" {
-  name    = "${aws_acm_certificate.cert.domain_validation_options.0.resource_record_name}"
-  type    = "${aws_acm_certificate.cert.domain_validation_options.0.resource_record_type}"
-  zone_id = "${data.aws_route53_zone.zone.id}"
-  records = ["${aws_acm_certificate.cert.domain_validation_options.0.resource_record_value}"]
-  ttl     = 60
-}
+resource "aws_acm_certificate_validation" "cert_validate" {
+  provider                = aws.virginia
+  certificate_arn         = aws_acm_certificate.cert.arn
+  validation_record_fqdns = [aws_route53_record.cert_dns.fqdn]
 
-resource "aws_acm_certificate_validation" "cert" {
-  certificate_arn         = "${aws_acm_certificate.cert.arn}"
-  validation_record_fqdns = ["${aws_route53_record.cert_validation.fqdn}"]
-}
-
-
-resource "aws_route53_record" "root_domain" {
-  zone_id = "${aws_route53_zone.main.zone_id}"
-  name = "mehlj.io"
-  type = "A"
-
-  alias {
-    name                   = aws_cloudfront_distribution.s3_distribution.domain_name
-    zone_id                = aws_cloudfront_distribution.s3_distribution.hosted_zone_id
-    evaluate_target_health = false
+  timeouts {
+    create = "90m"
   }
 }
+
+
+
+
+
+
+
+
+
+
+
 
 locals {
   s3_origin_id = "mehljresumeS3Origin"
@@ -170,7 +176,19 @@ resource "aws_cloudfront_distribution" "s3_distribution" {
   }
 
   viewer_certificate {
-    cloudfront_default_certificate = true
+    acm_certificate_arn = aws_acm_certificate.cert.arn
+    ssl_support_method = "sni-only"
   }
 }
 
+resource "aws_route53_record" "mehlj-io" {
+  zone_id = aws_route53_zone.main.zone_id
+  name    = "mehlj.io"
+  type    = "A"
+  alias {
+    name                   = aws_cloudfront_distribution.s3_distribution.domain_name
+    zone_id                = aws_cloudfront_distribution.s3_distribution.hosted_zone_id
+    evaluate_target_health = false
+  }
+  provider = aws.virginia
+}
