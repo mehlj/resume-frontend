@@ -1,8 +1,8 @@
 # TODO pick up here, ref: https://www.oss-group.co.nz/blog/automated-certificates-aws
 
 resource "aws_route53_zone" "main" {
-  name         = "justenmehl.com"
-  provider     = aws.virginia
+  name     = "justenmehl.com"
+  provider = aws.virginia
 }
 
 resource "aws_acm_certificate" "cert" {
@@ -33,7 +33,7 @@ resource "aws_acm_certificate_validation" "cert_validate" {
 }
 
 # alias record for cloudfront
-resource "aws_route53_record" "mehlj-io" {
+resource "aws_route53_record" "cf-record" {
   depends_on = [
     aws_cloudfront_distribution.s3_distribution
   ]

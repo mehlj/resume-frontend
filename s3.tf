@@ -1,5 +1,5 @@
 resource "aws_s3_bucket" "mehlj-resume" {
-  bucket = "mehlj.io"
+  bucket = "justenmehl.com"
 }
 
 resource "aws_s3_bucket_acl" "resume_bucket_acl" {
