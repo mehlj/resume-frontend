@@ -1,8 +1,22 @@
-# TODO pick up here, ref: https://www.oss-group.co.nz/blog/automated-certificates-aws
-
 resource "aws_route53_zone" "main" {
   name     = "justenmehl.com"
   provider = aws.virginia
+}
+
+resource "aws_route53_record" "ns" {
+  provider = aws.virginia
+  zone_id  = aws_route53_zone.main.zone_id
+  name     = "justenmehl.com"
+  type     = "NS"
+  ttl      = "30"
+
+  # has to match registered domain name servers
+  records  = [
+    "ns-721.awsdns-26.net",
+    "ns-1732.awsdns-24.co.uk",
+    "ns-456.awsdns-57.com",
+    "ns-1110.awsdns-10.org",
+  ]
 }
 
 resource "aws_acm_certificate" "cert" {
