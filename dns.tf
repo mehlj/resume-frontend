@@ -1,13 +1,10 @@
-# TODO pick up here, ref: https://www.oss-group.co.nz/blog/automated-certificates-aws
-
-resource "aws_route53_zone" "main" {
-  name     = "justenmehl.com"
-  provider = aws.virginia
+data "aws_route53_zone" "main" {
+  name         = "justenmehl.com."
 }
 
 resource "aws_acm_certificate" "cert" {
   provider          = aws.virginia
-  domain_name       = "justenmehl.com"
+  domain_name       = "resume.justenmehl.com"
   validation_method = "DNS"
 
   lifecycle {
@@ -21,7 +18,7 @@ resource "aws_route53_record" "cert_dns" {
   name            = tolist(aws_acm_certificate.cert.domain_validation_options)[0].resource_record_name
   records         = [tolist(aws_acm_certificate.cert.domain_validation_options)[0].resource_record_value]
   type            = tolist(aws_acm_certificate.cert.domain_validation_options)[0].resource_record_type
-  zone_id         = aws_route53_zone.main.zone_id
+  zone_id         = data.aws_route53_zone.main.zone_id
   ttl             = 60
   provider        = aws.virginia
 }
@@ -38,8 +35,8 @@ resource "aws_route53_record" "cf-record" {
     aws_cloudfront_distribution.s3_distribution
   ]
 
-  zone_id = aws_route53_zone.main.zone_id
-  name    = "justenmehl.com"
+  zone_id = data.aws_route53_zone.main.zone_id
+  name    = "resume.justenmehl.com"
   type    = "A"
   alias {
     name                   = aws_cloudfront_distribution.s3_distribution.domain_name

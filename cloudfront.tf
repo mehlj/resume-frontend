@@ -8,7 +8,7 @@ resource "aws_cloudfront_distribution" "s3_distribution" {
     origin_id    = local.s3_origin_id
   }
 
-  aliases = ["justenmehl.com"]
+  aliases = ["resume.justenmehl.com"]
 
   enabled             = true
   is_ipv6_enabled     = true
