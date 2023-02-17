@@ -155,6 +155,13 @@
     <li>University of Maryland Global Campus - Class of 2018</li>
   </ul>
 
+  <!-- visitor counter -->
+  <script>
+    async function incrementCounter() {
+      const post = await fetch("https://0n0sxlzu80.execute-api.us-east-1.amazonaws.com/resume_lambda_stage/increment").then((res) => res.json());
+    }
+    incrementCounter();
+  </script>
 </div>
 <div class="right"></div>
 <div id="footer">
