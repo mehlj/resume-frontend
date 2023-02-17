@@ -14,7 +14,6 @@ jobs:
   terraform:
     name: Deploy AWS infrastructure
     runs-on: ubuntu-22.04
-    needs: build
 
     steps:
     - uses: actions/checkout@v3
