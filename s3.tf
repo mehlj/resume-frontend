@@ -43,30 +43,30 @@ resource "aws_s3_bucket_website_configuration" "mehlj-resume-host" {
 resource "aws_s3_object" "html" {
   for_each = fileset("./src/", "**/*.html")
 
-  bucket = aws_s3_bucket.mehlj-resume.bucket
-  key = each.value
-  source = "./src/${each.value}"
-  etag = filemd5("./src/${each.value}")
+  bucket       = aws_s3_bucket.mehlj-resume.bucket
+  key          = each.value
+  source       = "./src/${each.value}"
+  etag         = filemd5("./src/${each.value}")
   content_type = "text/html"
 }
 
 resource "aws_s3_object" "css" {
   for_each = fileset("./src/", "**/*.css")
 
-  bucket = aws_s3_bucket.mehlj-resume.bucket
-  key = each.value
-  source = "./src/${each.value}"
-  etag = filemd5("./src/${each.value}")
+  bucket       = aws_s3_bucket.mehlj-resume.bucket
+  key          = each.value
+  source       = "./src/${each.value}"
+  etag         = filemd5("./src/${each.value}")
   content_type = "text/css"
 }
 
 resource "aws_s3_object" "images" {
   for_each = fileset("./src/", "**/*.png")
 
-  bucket = aws_s3_bucket.mehlj-resume.bucket
-  key = each.value
-  source = "./src/${each.value}"
-  etag = filemd5("./src/${each.value}")
+  bucket       = aws_s3_bucket.mehlj-resume.bucket
+  key          = each.value
+  source       = "./src/${each.value}"
+  etag         = filemd5("./src/${each.value}")
   content_type = "image/png"
 }
 

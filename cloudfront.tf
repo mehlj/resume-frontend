@@ -4,8 +4,8 @@ locals {
 
 resource "aws_cloudfront_distribution" "s3_distribution" {
   origin {
-    domain_name  = aws_s3_bucket.mehlj-resume.bucket_regional_domain_name
-    origin_id    = local.s3_origin_id
+    domain_name = aws_s3_bucket.mehlj-resume.bucket_regional_domain_name
+    origin_id   = local.s3_origin_id
   }
 
   aliases = ["resume.justenmehl.com"]
@@ -44,6 +44,6 @@ resource "aws_cloudfront_distribution" "s3_distribution" {
 
   viewer_certificate {
     acm_certificate_arn = aws_acm_certificate_validation.cert_validate.certificate_arn
-    ssl_support_method = "sni-only"
+    ssl_support_method  = "sni-only"
   }
 }
