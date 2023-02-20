@@ -165,7 +165,7 @@
 
   <!-- visitor counter -->
   <script>
-    let response = await fetch('https://0n0sxlzu80.execute-api.us-east-1.amazonaws.com/resume_lambda_stage/increment', {
+    fetch('https://0n0sxlzu80.execute-api.us-east-1.amazonaws.com/resume_lambda_stage/increment', {
       method: 'POST',
       headers: {
           'Accept': 'application/json',
@@ -176,15 +176,7 @@
       }
     })
     .then(response => response.json())
-    .then(response => console.log(JSON.stringify(response)))
-
-    if (response.ok) {
-      let json = await response.json();
-    } else {
-      alert("HTTP-Error: " + response.status);
-    }
-
-    document.getElementById("counter").innerHTML = "Visitor Count: " + (JSON.stringify(response));
+    .then(response => document.getElementById("counter").innerHTML = "Visitor Count: " + (JSON.stringify(response)))
   </script>
 </div>
 <div class="right"></div>
