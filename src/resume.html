@@ -155,6 +155,14 @@
     <li>University of Maryland Global Campus - Class of 2018</li>
   </ul>
 
+
+  <br>
+  <br>
+  <div id="counter"></div>
+  <div>Overview: <a href="todo">todo</a></div>
+  <div>Frontend: <a href="https://github.com/mehlj/resume-frontend">github.com/mehlj/resume-frontend</a></div>
+  <div>Backend: <a href="https://github.com/mehlj/resume-backend">github.com/mehlj/resume-backend</a></div>
+
   <!-- visitor counter -->
   <script>
     fetch('https://0n0sxlzu80.execute-api.us-east-1.amazonaws.com/resume_lambda_stage/increment', {
@@ -169,6 +177,8 @@
     })
     .then(response => response.json())
     .then(response => console.log(JSON.stringify(response)))
+
+    document.getElementById("counter").innerHTML = "Visitor Count: " + (JSON.stringify(response));
   </script>
 </div>
 <div class="right"></div>
