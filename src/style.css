@@ -7,7 +7,8 @@ img {
   padding:20px;
 }
 img.profilepic {
-  float: left
+  float: left;
+  border-radius: 50%;
 }
 
 .title {
