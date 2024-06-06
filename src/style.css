@@ -5,10 +5,10 @@ body {
 
 img {
   padding:20px;
+  border-radius: 50%;
 }
 img.profilepic {
-  float: left;
-  border-radius: 50%;
+  float: left
 }
 
 .title {
