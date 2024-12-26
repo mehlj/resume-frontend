@@ -3,8 +3,31 @@ body {
   margin-right: 300;
 }
 
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.profile {
+  flex: 1;
+  max-width: 45%;
+  padding-top: 30px;
+}
+
+.skills {
+  flex: 1.5;
+  max-width: 100%;
+  padding-left: 80px;
+  padding-top: 40px;
+
+  /* visual border doesn't look too nice. may come back to this
+  border-left: 2px solid #ccc; 
+  */
+}
+
 img {
-  padding:20px;
+  padding:40px;
   border-radius: 50%;
 }
 img.profilepic {
